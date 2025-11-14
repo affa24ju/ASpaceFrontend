@@ -1,6 +1,10 @@
+import { useState } from "react";
 
 
 export default function VideoUploader() {
+
+    // Sparar URL för den uppladdade videon
+    const [videoURL, setVideoURL] = useState<string | null>(null);
 
     const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -8,7 +12,11 @@ export default function VideoUploader() {
 
         // Här kan du lägga till logik för att hantera uppladdningen av videofilen
         console.log("Uppladdad fil:", file);
-    }
+
+        // Skapar en temporär URL av den uppladdade videon, så att vi kan spela upp den direkt
+        const url = URL.createObjectURL(file);
+        setVideoURL(url);
+    };
 
   return (
     <div>
@@ -34,10 +42,16 @@ export default function VideoUploader() {
                 />
 
             </label>
+            {/* Videospelare för att visa den uppladdade videon */}
+            {videoURL && (
+                <div className="mt-8">
+                    <h3 className="text-lg text-cyan-700 font-semibold mb-4 text-center">
+                        Förhandsgranskning av uppladdad video
+                    </h3>
+                    <video  src={videoURL} controls className="w-full rounded-lg shadow" />
+                </div>
+            )}
         </div>
 
     </div>
-  )};
-
-
-   
+  )};   
